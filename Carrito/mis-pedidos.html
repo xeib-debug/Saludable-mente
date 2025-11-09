@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Pedidos - Saludablemente</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    head{
+        cursor: default;
+    }
+    .pedidos-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .pedidos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .pedidos-header h1 {
+      color: #2E8B57;
+      margin: 0;
+    }
+    
+    .usuario-info {
+      background: #f0fdf4;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .pedido-card {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+    }
+    
+    .pedido-card:hover {
+      border-color: #2E8B57;
+      box-shadow: 0 4px 12px rgba(46, 139, 87, 0.1);
+    }
+    
+    .pedido-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+    
+    .pedido-numero {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2E8B57;
+    }
+    
+    .pedido-fecha {
+      color: #64748b;
+      font-size: 14px;
+    }
+    
+    .pedido-estado {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .badge-estado {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    .badge-pendiente {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-procesando {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge-enviado {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .badge-entregado {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .badge-pagado {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .badge-sin-pagar {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .productos-lista {
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .producto-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .producto-item:last-child {
+      border-bottom: none;
+    }
+    
+    .producto-nombre {
+      font-weight: 500;
+      color: #334155;
+    }
+    
+    .producto-precio {
+      font-weight: 600;
+      color: #2E8B57;
+    }
+    
+    .pedido-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 2px solid #2E8B57;
+      margin-top: 12px;
+    }
+    
+    .total-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #334155;
+    }
+    
+    .total-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2E8B57;
+    }
+    
+    .pedido-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .info-item {
+      font-size: 14px;
+    }
+    
+    .info-label {
+      display: block;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+    
+    .info-value {
+      color: #64748b;
+    }
+    
+    .no-pedidos {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .no-pedidos-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    
+    .no-pedidos h3 {
+      color: #334155;
+      margin-bottom: 8px;
+    }
+    
+    .no-pedidos p {
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .pedidos-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .pedido-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      
+      .pedido-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pedidos-container">
+    <div class="pedidos-header">
+      <h1>📦 Mis Pedidos</h1>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn ghost" onclick="window.location.href='../index.html'">← Volver al Inicio</button>
+        <button class="btn" onclick="window.location.href='index3.html'">🛒 Ir al Carrito</button>
+      </div>
+    </div>
+    
+    <div class="usuario-info" id="usuario-info">
+      <!-- Se llenará con JavaScript -->
+    </div>
+    
+    <div id="lista-pedidos">
+      <!-- Se llenará con JavaScript -->
+    </div>
+  </div>
+  
+  <div id="alerta" class="alerta"></div>
+  
+  <script src="../Js/Carrito.js"></script>
+  <script src="../Js/usuarios.js"></script>
+  <script src="../Js/pedidos.js"></script>
+  <script>
+    // Verificar si hay usuario logueado
+    if (!verificarSesion()) {
+      alert("Debes iniciar sesión para ver tus pedidos");
+      window.location.href = '../Auth/login.html';
+    }
+    
+    const usuario = obtenerUsuarioActual();
+    
+    // Mostrar info del usuario
+    document.getElementById('usuario-info').innerHTML = `
+      <div>
+        <strong>🟢 ${usuario.nombre}</strong>
+        <span style="color: #64748b; margin-left: 12px;">${usuario.email}</span>
+      </div>
+      <button onclick="cerrarSesion()" style="background: none; border: none; color: #dc2626; cursor: pointer; font-weight: 600; font-size: 14px;">Cerrar sesión</button>
+    `;
+    
+    // Obtener pedidos del usuario
+    const pedidos = obtenerPedidosUsuario(usuario.id);
+    const container = document.getElementById('lista-pedidos');
+    
+    if (pedidos.length === 0) {
+      container.innerHTML = `
+        <div class="no-pedidos">
+          <div class="no-pedidos-icon">📦</div>
+          <h3>Aún no has realizado ningún pedido</h3>
+          <p>¡Explorá nuestros productos y hacé tu primera compra!</p>
+          <button class="btn" onclick="window.location.href='../index.html'">Ver Productos</button>
+        </div>
+      `;
+    } else {
+      const badgeClasses = {
+        'Pendiente': 'badge-pendiente',
+        'Procesando': 'badge-procesando',
+        'Enviado': 'badge-enviado',
+        'Entregado': 'badge-entregado'
+      };
+      
+      pedidos.forEach(pedido => {
+        const card = document.createElement('div');
+        card.className = 'pedido-card';
+        
+        // Calcular subtotal de productos
+        const subtotal = pedido.productos.reduce((sum, p) => sum + p.precio, 0);
+        
+        card.innerHTML = `
+          <div class="pedido-header">
+            <div>
+              <div class="pedido-numero">Pedido ${pedido.numeroOrden}</div>
+              <div class="pedido-fecha">${pedido.fechaFormateada}</div>
+            </div>
+          </div>
+          
+          <div class="pedido-estado">
+            <span class="badge-estado ${badgeClasses[pedido.estado]}">${pedido.estado}</span>
+            <span class="badge-estado ${pedido.pagado ? 'badge-pagado' : 'badge-sin-pagar'}">
+              ${pedido.pagado ? '✓ Pagado' : '⏳ Pendiente de pago'}
+            </span>
+          </div>
+          
+          <div class="pedido-info-grid">
+            <div class="info-item">
+              <span class="info-label">Método de pago</span>
+              <span class="info-value">${pedido.metodoPago === 'transferencia' ? '💳 Transferencia' : '💰 Mercado Pago'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Dirección de envío</span>
+              <span class="info-value">${pedido.direccionEnvio}</span>
+            </div>
+          </div>
+          
+          <div class="productos-lista">
+            <strong style="color: #334155; margin-bottom: 8px; display: block;">Productos:</strong>
+            ${pedido.productos.map(p => `
+              <div class="producto-item">
+                <span class="producto-nombre">${p.nombre}</span>
+                <span class="producto-precio">$${p.precio}</span>
+              </div>
+            `).join('')}
+            
+            <div class="pedido-total">
+              <div>
+                <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">
+                  Subtotal: $${subtotal} ${pedido.envio > 0 ? `+ Envío: $${pedido.envio}` : '+ Envío GRATIS'}
+                </div>
+                <span class="total-label">Total:</span>
+              </div>
+              <span class="total-value">$${pedido.total}</span>
+            </div>
+          </div>
+          
+          ${!pedido.pagado && pedido.metodoPago === 'transferencia' ? `
+            <div style="background: #eff6ff; border: 2px solid #3b82f6; padding: 12px; border-radius: 8px; margin-top: 12px;">
+              <strong style="color: #1e40af;">💳 Datos para transferencia:</strong><br>
+              <small style="color: #64748b; line-height: 1.6;">
+                CBU: 0000003100000000000000 | Alias: SALUDABLE.MP<br>
+                Enviá el comprobante por WhatsApp al +54 9 362 4992755
+              </small>
+            </div>
+          ` : ''}
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - Saludablemente</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    head{
+        cursor: default;
+    }
+    .login-container {
+      max-width: 450px;
+      margin: 60px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .login-header h1 {
+      color: #2E8B57;
+      margin-bottom: 8px;
+    }
+    
+    .login-header p {
+      color: #64748b;
+      font-size: 14px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: #64748b;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab.active {
+      color: #2E8B57;
+      border-bottom-color: #2E8B57;
+    }
+    
+    .form-group {
+      margin-bottom: 18px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #334155;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #2E8B57;
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    .form-content {
+      display: none;
+    }
+    
+    .form-content.active {
+      display: block;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #2E8B57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .submit-btn:hover {
+      background: #256d45;
+    }
+    
+    .volver {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .volver a {
+      color: #2E8B57;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .volver a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>🌿 Saludablemente</h1>
+      <p>Ingresá o creá tu cuenta para continuar</p>
+    </div>
+    
+    <div class="tabs">
+      <button class="tab active" onclick="cambiarTab('login')">Iniciar Sesión</button>
+      <button class="tab" onclick="cambiarTab('registro')">Registrarse</button>
+    </div>
+    
+    <!-- Formulario de Login -->
+    <div id="login-form" class="form-content active">
+      <form onsubmit="event.preventDefault(); login();">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="tu@email.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="submit-btn">Iniciar Sesión</button>
+      </form>
+    </div>
+    
+    <!-- Formulario de Registro -->
+    <div id="registro-form" class="form-content">
+      <form onsubmit="event.preventDefault(); registrar();">
+        <div class="form-group">
+          <label for="reg-nombre">Nombre completo</label>
+          <input type="text" id="reg-nombre" placeholder="Juan Pérez" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="tu@email.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-telefono">Teléfono</label>
+          <input type="tel" id="reg-telefono" placeholder="+54 9 362 4992755" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-direccion">Dirección</label>
+          <textarea id="reg-direccion" placeholder="Calle, número, ciudad, provincia" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password" placeholder="••••••••" required minlength="6">
+        </div>
+        
+        <button type="submit" class="submit-btn">Crear Cuenta</button>
+      </form>
+    </div>
+    
+    <div class="volver">
+      <a href="../index.html">← Volver al inicio</a>
+    </div>
+  </div>
+  
+  <div id="alerta" class="alerta"></div>
+  
+  <script src="../Js/Carrito.js"></script>
+  <script src="../Js/usuarios.js"></script>
+  <script>
+    function cambiarTab(tab) {
+      // Actualizar tabs
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Actualizar formularios
+      document.querySelectorAll('.form-content').forEach(f => f.classList.remove('active'));
+      document.getElementById(tab + '-form').classList.add('active');
+    }
+    
+    function login() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      if (iniciarSesion(email, password)) {
+        setTimeout(() => {
+          window.location.href = '../index.html';
+        }, 1000);
+      }
+    }
+    
+    function registrar() {
+      const nombre = document.getElementById('reg-nombre').value;
+      const email = document.getElementById('reg-email').value;
+      const telefono = document.getElementById('reg-telefono').value;
+      const direccion = document.getElementById('reg-direccion').value;
+      const password = document.getElementById('reg-password').value;
+      
+      if (registrarUsuario(email, password, nombre, direccion, telefono)) {
+        setTimeout(() => {
+          cambiarTab('login');
+          document.getElementById('login-email').value = email;
+        }, 1500);
+      }
+    }
+  </script>
+</body>
+</html>

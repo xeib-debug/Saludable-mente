@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedido Confirmado - Saludablemente</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    head{
+        cursor: default;
+    }
+    .confirmacion-container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .success-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+    
+    .confirmacion-container h1 {
+      color: #2E8B57;
+      margin-bottom: 12px;
+    }
+    
+    .pedido-info {
+      background: #f8fafc;
+      padding: 24px;
+      border-radius: 12px;
+      margin: 24px 0;
+      text-align: left;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      color: #334155;
+    }
+    
+    .info-value {
+      color: #64748b;
+    }
+    
+    .payment-info {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    
+    .payment-info h3 {
+      color: #1e40af;
+      margin-top: 0;
+    }
+    
+    .acciones {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="confirmacion-container">
+    <div class="success-icon">✅</div>
+    <h1>¡Pedido Confirmado!</h1>
+    <p style="color: #64748b; font-size: 16px;">Tu pedido ha sido registrado exitosamente</p>
+    
+    <div class="pedido-info" id="info-pedido" style="display: none;">
+      <!-- Se llenará con JavaScript -->
+    </div>
+    
+    <div class="payment-info" id="info-pago" style="display: none;">
+      <!-- Se llenará con JavaScript -->
+    </div>
+    
+    <p style="color: #64748b; font-size: 14px;">
+      📧 Te enviamos un email a tu casilla con todos los detalles del pedido.
+    </p>
+    
+    <div class="acciones">
+      <button class="btn" onclick="window.location.href='../index.html'">
+        Volver al Inicio
+      </button>
+      <button class="btn ghost" onclick="window.location.href='mis-pedidos.html'">
+        Ver mis Pedidos
+      </button>
+    </div>
+  </div>
+  
+  <script src="../Js/pedidos.js"></script>
+  <script>
+    // Obtener número de orden de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const numeroPedido = urlParams.get('pedido');
+    
+    if (!numeroPedido) {
+      window.location.href = '../index.html';
+    }
+    
+    // Buscar el pedido
+    const pedidos = obtenerTodosPedidos();
+    const pedido = pedidos.find(p => p.numeroOrden === numeroPedido);
+    
+    if (!pedido) {
+      document.querySelector('.confirmacion-container').innerHTML = `
+        <h1>Pedido no encontrado</h1>
+        <p>El pedido que buscas no existe</p>
+        <button class="btn" onclick="window.location.href='../index.html'">Volver al Inicio</button>
+      `;
+    } else {
+      // Mostrar info del pedido
+      document.getElementById('info-pedido').innerHTML = `
+        <div class="info-row">
+          <span class="info-label">Número de Orden:</span>
+          <span class="info-value" style="font-weight: 700; color: #2E8B57;">${pedido.numeroOrden}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Fecha:</span>
+          <span class="info-value">${pedido.fechaFormateada}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Total:</span>
+          <span class="info-value" style="font-weight: 700; font-size: 18px; color: #2E8B57;">$${pedido.total}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Método de pago:</span>
+          <span class="info-value">${pedido.metodoPago === 'transferencia' ? '💳 Transferencia' : '💰 Mercado Pago'}</span>
+        </div>
+      `;
+      
+      // Mostrar info de pago según método
+      if (pedido.metodoPago === 'transferencia') {
+        document.getElementById('info-pago').innerHTML = `
+          <h3>Datos para Transferencia</h3>
+          <p><strong>CBU:</strong> 0000003100000000000000</p>
+          <p><strong>Alias:</strong> SALUDABLE.MP</p>
+          <p><strong>Titular:</strong> Saludablemente S.A.</p>
+          <p><strong>Monto:</strong> $${pedido.total}</p>
+          <p style="margin-top: 12px; font-size: 14px;">
+            📌 <strong>Importante:</strong> Al realizar la transferencia, por favor enviá el comprobante por WhatsApp al <strong>+54 9 362 4992755</strong> indicando tu número de orden <strong>${pedido.numeroOrden}</strong>
+          </p>
+        `;
+      } else {
+        document.getElementById('info-pago').innerHTML = `
+          <h3>Pagar con Mercado Pago</h3>
+          <p>Te enviamos un link de pago a tu email. También podés acceder haciendo clic en el siguiente botón:</p>
+          <button class="btn" style="margin-top: 12px;" onclick="alert('Esta funcionalidad se integrará con la API de Mercado Pago')">
+            Pagar con Mercado Pago
+          </button>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

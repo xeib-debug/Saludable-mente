@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Más Productos - Saludablemente</title>
+  <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+      <h1>Saludablemente</h1>
+      <nav class="nav-options">
+        <a href="#" onclick="noDisponible()">Snacks</a>
+        <a href="#" onclick="noDisponible()">Bebidas</a>
+        <a href="#" onclick="noDisponible()">Orgánicos</a>
+        <a href="#" onclick="noDisponible()">Ofertas</a>
+      </nav>
+      <a href="../index.html" class="btn-volver">Volver</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="productosDes">
+      <h2>Más Productos</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="img" style="background-image:url('https://www.inti-tea.com/cdn/shop/collections/IMG_6373_f28b813e-58eb-4ee2-b29c-59c17253c50a_600x600.jpg?v=1712751358');"></div>
+          <div class="card-info">
+            <h3>Té Verde Orgánico</h3>
+            <p>Frescura natural, antioxidantes y bienestar diario.</p>
+            <div class="price">$850</div>
+            <button class="btn" onclick="agregarYAvisar('Té Verde Orgánico', 850)">Agregar</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=800&q=60');"></div>
+          <div class="card-info">
+            <h3>Mix de Frutos Secos</h3>
+            <p>Almendras, nueces, pasas y arándanos deshidratados.</p>
+            <div class="price">$1.150</div>
+            <button class="btn" onclick="agregarYAvisar('Mix de Frutos Secos', 1150)">Agregar</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=800&q=60');"></div>
+          <div class="card-info">
+            <h3>Barritas de Cereal Natural</h3>
+            <p>Sin conservantes, endulzadas con miel orgánica.</p>
+            <div class="price">$560</div>
+            <button class="btn" onclick="agregarYAvisar('Barritas de Cereal Natural', 560)">Agregar</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img" style="background-image:url('https://cdn0.uncomo.com/es/posts/5/5/4/como_hacer_galletas_integrales_50455_orig.jpg');"></div>
+          <div class="card-info">
+            <h3>Galletas Integrales</h3>
+            <p>Harina integral, avena y semillas de girasol.</p>
+            <div class="price">$670</div>
+            <button class="btn" onclick="agregarYAvisar('Galletas Integrales', 670)">Agregar</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-brand">Saludablemente</div>
+        <p class="footer-slogan">💳 Pagos seguros | 📦 Comprá fácil y rápido</p>
+      </div>
+
+      <div class="footer-center">
+        <p class="footer-community">Seguinos para recibir tips saludables:</p>
+        <div class="footer-social">
+          <button class="redesButton" onclick="window.open('https://www.instagram.com/saludablementear?igsh=MXdidnF6Zm55aXZ4Yw==', '_blank')"  aria-label="Instagram">📸 Instagram</button>
+          <button class="redesButton" onclick="noDisponible()" aria-label="Facebook">📘 Facebook</button>
+          <button class="redesButton" onclick="noDisponible()" aria-label="TikTok">🎵 TikTok</button>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-copy">© Saludablemente - Todos los derechos reservados</div>
+        <div class="footer-links">
+          <button class="boton-texto" onclick="noDisponible()">Política de privacidad</button>
+          <a>|</a>
+          <button class="boton-texto" onclick="noDisponible()">Términos</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+<script>
+  // Declarar el carrito en el ámbito global
+const cart = [];
+
+// Función principal: agrega al carrito y luego muestra aviso
+function agregarYAvisar(name, price) {
+  // Convertir el precio a número, por si llega como texto
+  const numericPrice = parseFloat(price);
+  
+  addToCart(name, numericPrice);
+  setTimeout(() => ComNoDispo(name), 1600);
+}
+
+// Agregar producto al carrito
+function addToCart(name, price) {
+  cart.push({ name, price });
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  mostrarAlerta(`${name} agregado al carrito. Total: $${total}`, "info");
+}
+
+// Notificación “boton no disponible”
+function noDisponible(name) {
+  mostrarAlerta(`⚠️ Esta función aún no está disponible.`, "error");
+}
+
+// Notificación “no disponible”
+function ComNoDispo(name) {
+  mostrarAlerta(`⚠️ La compra de ${name} aún no está disponible.`, "error");
+}
+
+// Alerta personalizada (ya existente)
+function mostrarAlerta(mensaje, tipo="info") {
+  const alerta = document.getElementById("alerta");
+  alerta.textContent = mensaje;
+  alerta.className = `alerta mostrar ${tipo}`;
+  setTimeout(() => alerta.classList.remove("mostrar"), 3000);
+}
+</script>
+
+  <div id="alerta" class="alerta"></div>
+</body>
+</html>
+</body>
+</html>

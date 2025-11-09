@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - Saludablemente</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    head{
+        cursor: default;
+    }
+    .admin-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .admin-header h1 {
+      color: #2E8B57;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, #2E8B57, #68c28f);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .stat-card .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0;
+    }
+    
+    .pedidos-section {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .pedido-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all 0.3s;
+    }
+    
+    .pedido-card:hover {
+      border-color: #2E8B57;
+      box-shadow: 0 4px 12px rgba(46, 139, 87, 0.1);
+    }
+    
+    .pedido-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .pedido-numero {
+      font-weight: 700;
+      font-size: 16px;
+      color: #2E8B57;
+    }
+    
+    .pedido-fecha {
+      color: #64748b;
+      font-size: 13px;
+    }
+    
+    .pedido-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 12px 0;
+    }
+    
+    .info-item {
+      font-size: 14px;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      color: #334155;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .info-value {
+      color: #64748b;
+    }
+    
+    .productos-lista {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    
+    .badge-estado {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-pendiente {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-procesando {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge-enviado {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .badge-entregado {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .acciones {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .btn-estado {
+      background: #2E8B57;
+      color: white;
+    }
+    
+    .btn-estado:hover {
+      background: #256d45;
+    }
+    
+    .btn-pagado {
+      background: #0284c7;
+      color: white;
+    }
+    
+    .btn-pagado:hover {
+      background: #0369a1;
+    }
+    
+    .filtros {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .filtros select,
+    .filtros input {
+      padding: 8px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .no-pedidos {
+      text-align: center;
+      padding: 40px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>📊 Panel de Administración</h1>
+      <button class="btn" onclick="window.location.href='../index.html'">Volver al Sitio</button>
+    </div>
+    
+    <!-- Estadísticas -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Ventas</h3>
+        <p class="stat-value" id="stat-ventas">$0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Pedidos</h3>
+        <p class="stat-value" id="stat-pedidos">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pedidos Pendientes</h3>
+        <p class="stat-value" id="stat-pendientes">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Venta Promedio</h3>
+        <p class="stat-value" id="stat-promedio">$0</p>
+      </div>
+    </div>
+    
+    <!-- Pedidos -->
+    <div class="pedidos-section">
+      <h2 style="margin-top: 0;">Pedidos Recientes</h2>
+      
+      <div class="filtros">
+        <select id="filtro-estado" onchange="filtrarPedidos()">
+          <option value="todos">Todos los estados</option>
+          <option value="Pendiente">Pendientes</option>
+          <option value="Procesando">Procesando</option>
+          <option value="Enviado">Enviados</option>
+          <option value="Entregado">Entregados</option>
+        </select>
+        
+        <input type="text" id="buscar-cliente" placeholder="Buscar por cliente..." onkeyup="filtrarPedidos()">
+      </div>
+      
+      <div id="lista-pedidos">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
+  
+  <div id="alerta" class="alerta"></div>
+  
+  <script src="../Js/Carrito.js"></script>
+  <script src="../Js/usuarios.js"></script>
+  <script src="../Js/pedidos.js"></script>
+  <script>
+    // Verificar acceso de admin
+    const adminLogueado = localStorage.getItem("adminLogueado");
+    const loginTime = localStorage.getItem("adminLoginTime");
+    const SESION_DURACION = 2 * 60 * 60 * 1000; // 2 horas
+    
+    if (!adminLogueado || !loginTime || (Date.now() - parseInt(loginTime)) > SESION_DURACION) {
+      alert("Acceso denegado. Debes iniciar sesión como administrador.");
+      window.location.href = "admin-login.html";
+    }
+    
+    // Cargar estadísticas
+    const stats = obtenerEstadisticas();
+    document.getElementById('stat-ventas').textContent = `$${stats.totalVentas}`;
+    document.getElementById('stat-pedidos').textContent = stats.totalPedidos;
+    document.getElementById('stat-pendientes').textContent = stats.pedidosPendientes;
+    document.getElementById('stat-promedio').textContent = `$${stats.ventaPromedio}`;
+    
+    // Mostrar pedidos
+    function mostrarPedidos(pedidosFiltrados = null) {
+      const pedidos = pedidosFiltrados || obtenerTodosPedidos();
+      const container = document.getElementById('lista-pedidos');
+      
+      if (pedidos.length === 0) {
+        container.innerHTML = '<div class="no-pedidos">No hay pedidos aún 📦</div>';
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      pedidos.forEach(pedido => {
+        const badgeClasses = {
+          'Pendiente': 'badge-pendiente',
+          'Procesando': 'badge-procesando',
+          'Enviado': 'badge-enviado',
+          'Entregado': 'badge-entregado'
+        };
+        
+        const card = document.createElement('div');
+        card.className = 'pedido-card';
+        card.innerHTML = `
+          <div class="pedido-header">
+            <span class="pedido-numero">Pedido ${pedido.numeroOrden}</span>
+            <span class="pedido-fecha">${pedido.fechaFormateada}</span>
+          </div>
+          
+          <div class="pedido-info">
+            <div class="info-item">
+              <span class="info-label">Cliente</span>
+              <span class="info-value">${pedido.cliente.nombre}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email</span>
+              <span class="info-value">${pedido.cliente.email}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Teléfono</span>
+              <span class="info-value">${pedido.cliente.telefono}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total</span>
+              <span class="info-value" style="font-weight: 700; color: #2E8B57;">$${pedido.total}</span>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label">Dirección de envío</span>
+            <span class="info-value">${pedido.direccionEnvio}</span>
+          </div>
+          
+          <div class="productos-lista">
+            <strong>Productos:</strong><br>
+            ${pedido.productos.map(p => `• ${p.nombre} - $${p.precio}`).join('<br>')}
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+            <div>
+              <span class="badge-estado ${badgeClasses[pedido.estado]}">${pedido.estado}</span>
+              ${pedido.pagado ? '<span class="badge-estado badge-entregado" style="margin-left: 8px;">✓ Pagado</span>' : '<span class="badge-estado badge-pendiente" style="margin-left: 8px;">⏳ Sin pagar</span>'}
+              <span style="margin-left: 12px; color: #64748b; font-size: 13px;">Método: ${pedido.metodoPago === 'transferencia' ? '💳 Transferencia' : '💰 Mercado Pago'}</span>
+            </div>
+          </div>
+          
+          <div class="acciones">
+            <select class="btn-small btn-estado" onchange="cambiarEstado(${pedido.id}, this.value)">
+              <option value="">Cambiar estado...</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Procesando">Procesando</option>
+              <option value="Enviado">Enviado</option>
+              <option value="Entregado">Entregado</option>
+            </select>
+            
+            ${!pedido.pagado ? `<button class="btn-small btn-pagado" onclick="marcarPagado(${pedido.id})">Marcar como pagado</button>` : ''}
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+    
+    function cambiarEstado(pedidoId, nuevoEstado) {
+      if (!nuevoEstado) return;
+      
+      if (actualizarEstadoPedido(pedidoId, nuevoEstado)) {
+        mostrarAlerta(`Estado actualizado a: ${nuevoEstado}`, 'info');
+        mostrarPedidos();
+      }
+    }
+    
+    function marcarPagado(pedidoId) {
+      if (marcarComoPagado(pedidoId)) {
+        mostrarAlerta('Pedido marcado como pagado', 'info');
+        mostrarPedidos();
+      }
+    }
+    
+    function filtrarPedidos() {
+      const estadoFiltro = document.getElementById('filtro-estado').value;
+      const busqueda = document.getElementById('buscar-cliente').value.toLowerCase();
+      
+      let pedidos = obtenerTodosPedidos();
+      
+      if (estadoFiltro !== 'todos') {
+        pedidos = pedidos.filter(p => p.estado === estadoFiltro);
+      }
+      
+      if (busqueda) {
+        pedidos = pedidos.filter(p => 
+          p.cliente.nombre.toLowerCase().includes(busqueda) ||
+          p.cliente.email.toLowerCase().includes(busqueda) ||
+          p.numeroOrden.toLowerCase().includes(busqueda)
+        );
+      }
+      
+      mostrarPedidos(pedidos);
+    }
+    
+    // Mostrar pedidos al cargar
+    mostrarPedidos();
+  </script>
+</body>
+</html>

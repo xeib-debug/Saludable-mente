@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios - Admin</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    head{
+        cursor: default;
+    }
+    .usuarios-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .usuarios-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .usuarios-table {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    thead {
+      background: linear-gradient(135deg, #2E8B57, #68c28f);
+      color: white;
+    }
+    
+    th {
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    td {
+      padding: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+    
+    .no-usuarios {
+      text-align: center;
+      padding: 60px;
+      color: #64748b;
+    }
+    
+    .badge-fecha {
+      font-size: 12px;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="usuarios-container">
+    <div class="usuarios-header">
+      <h1>👥 Usuarios Registrados</h1>
+      <div>
+        <button class="btn ghost" onclick="window.location.href='admin.html'">← Volver al Panel</button>
+        <button class="btn" onclick="exportarUsuarios()">📥 Exportar CSV</button>
+      </div>
+    </div>
+    
+    <div class="usuarios-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Fecha Registro</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-usuarios">
+          <!-- Se llenará con JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div id="alerta" class="alerta"></div>
+  
+  <script src="../Js/Carrito.js"></script>
+  <script src="../Js/usuarios.js"></script>
+  <script>
+    // Verificar acceso de admin
+    const adminLogueado = localStorage.getItem("adminLogueado");
+    if (!adminLogueado) {
+      alert("Acceso denegado");
+      window.location.href = "admin-login.html";
+    }
+    
+    // Cargar usuarios
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const tbody = document.getElementById('tabla-usuarios');
+    
+    if (usuarios.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="no-usuarios">No hay usuarios registrados aún 👤</td></tr>';
+    } else {
+      usuarios.forEach(usuario => {
+        const fecha = new Date(usuario.fechaRegistro).toLocaleDateString('es-AR');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${usuario.id}</strong></td>
+          <td>${usuario.nombre}</td>
+          <td>${usuario.email}</td>
+          <td>${usuario.telefono}</td>
+          <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${usuario.direccion}</td>
+          <td><span class="badge-fecha">${fecha}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    
+    function exportarUsuarios() {
+      if (usuarios.length === 0) {
+        mostrarAlerta("No hay usuarios para exportar", "error");
+        return;
+      }
+      
+      let csv = "ID,Nombre,Email,Teléfono,Dirección,Fecha Registro\n";
+      usuarios.forEach(u => {
+        const fecha = new Date(u.fechaRegistro).toLocaleDateString('es-AR');
+        csv += `${u.id},"${u.nombre}","${u.email}","${u.telefono}","${u.direccion}",${fecha}\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `usuarios_${Date.now()}.csv`;
+      a.click();
+      
+      mostrarAlerta("✅ Usuarios exportados", "info");
+    }
+  </script>
+</body>
+</html>

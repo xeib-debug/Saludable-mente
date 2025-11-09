@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra - Saludablemente</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    head{
+        cursor: default;
+    }
+    .checkout-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    
+    .checkout-section {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #334155;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #2E8B57;
+    }
+    
+    .resumen-producto {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .resumen-producto:last-child {
+      border-bottom: none;
+    }
+    
+    .resumen-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      margin-top: 16px;
+      border-top: 2px solid #2E8B57;
+      font-size: 18px;
+      font-weight: 700;
+      color: #2E8B57;
+    }
+    
+    .metodo-pago {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .metodo-pago label {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .metodo-pago input[type="radio"] {
+      display: none;
+    }
+    
+    .metodo-pago input[type="radio"]:checked + label {
+      border-color: #2E8B57;
+      background: rgba(46, 139, 87, 0.1);
+      font-weight: 700;
+    }
+    
+    .alert-info {
+      background: #e0f2fe;
+      border-left: 4px solid #0284c7;
+      padding: 12px;
+      margin: 16px 0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 900px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="checkout-container">
+    <h1>Finalizar Compra</h1>
+    
+    <div id="usuario-info" style="background: #f0fdf4; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+      <!-- Se llenará con JavaScript -->
+    </div>
+    
+    <div class="checkout-grid">
+      <!-- Formulario de datos -->
+      <div class="checkout-section">
+        <div class="section-title">Datos de Envío</div>
+        
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" id="nombre" readonly>
+        </div>
+        
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" readonly>
+        </div>
+        
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="telefono" readonly>
+        </div>
+        
+        <div class="form-group">
+          <label>Dirección de envío</label>
+          <textarea id="direccion" rows="3"></textarea>
+          <small style="color: #64748b;">Podés modificar la dirección si es necesario</small>
+        </div>
+        
+        <div class="section-title" style="margin-top: 24px;">Método de Pago</div>
+        
+        <div class="metodo-pago">
+          <input type="radio" name="pago" id="transferencia" value="transferencia" checked>
+          <label for="transferencia">
+            💳 Transferencia
+          </label>
+          
+          <input type="radio" name="pago" id="mercadopago" value="mercadopago">
+          <label for="mercadopago">
+            💰 Mercado Pago
+          </label>
+        </div>
+        
+        <div class="alert-info">
+          ℹ️ Después de confirmar recibirás un email con los datos para realizar el pago.
+        </div>
+      </div>
+      
+      <!-- Resumen del pedido -->
+      <div>
+        <div class="checkout-section">
+          <div class="section-title">Resumen del Pedido</div>
+          
+          <div id="resumen-productos">
+            <!-- Se llenará con JavaScript -->
+          </div>
+          
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span>Subtotal:</span>
+              <span id="subtotal">$0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span>Envío:</span>
+              <span id="envio">$500</span>
+            </div>
+            <div class="resumen-total">
+              <span>Total:</span>
+              <span id="total">$0</span>
+            </div>
+          </div>
+          
+          <button class="btn" style="width: 100%; margin-top: 16px;" onclick="confirmarCompra()">
+            Confirmar Pedido
+          </button>
+          
+          <button class="btn ghost" style="width: 100%; margin-top: 8px;" onclick="window.location.href='index3.html'">
+            Volver al Carrito
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="alerta" class="alerta"></div>
+  
+  <script src="../Js/Carrito.js"></script>
+  <script src="../Js/usuarios.js"></script>
+  <script src="../Js/pedidos.js"></script>
+  <script>
+    // Verificar si hay usuario logueado
+    if (!verificarSesion()) {
+      alert("Debes iniciar sesión para continuar");
+      window.location.href = '../Auth/login.html';
+    }
+    
+    // Verificar si hay productos en el carrito
+    if (cart.length === 0) {
+      alert("Tu carrito está vacío");
+      window.location.href = '../index.html';
+    }
+    
+    // Cargar datos del usuario
+    const usuario = obtenerUsuarioActual();
+    document.getElementById('usuario-info').innerHTML = `
+      <strong>🟢 Sesión iniciada como:</strong> ${usuario.nombre} (${usuario.email})
+      <button onclick="cerrarSesion()" style="float: right; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: 600;">Cerrar sesión</button>
+    `;
+    
+    document.getElementById('nombre').value = usuario.nombre;
+    document.getElementById('email').value = usuario.email;
+    document.getElementById('telefono').value = usuario.telefono;
+    document.getElementById('direccion').value = usuario.direccion;
+    
+    // Mostrar resumen de productos
+    const resumenDiv = document.getElementById('resumen-productos');
+    cart.forEach(item => {
+      resumenDiv.innerHTML += `
+        <div class="resumen-producto">
+          <span>${item.name}</span>
+          <span>$${item.price}</span>
+        </div>
+      `;
+    });
+    
+    // Calcular totales
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    const envio = subtotal > 2000 ? 0 : 500;
+    const total = subtotal + envio;
+    
+    document.getElementById('subtotal').textContent = `$${subtotal}`;
+    document.getElementById('envio').textContent = envio === 0 ? 'GRATIS' : `$${envio}`;
+    document.getElementById('total').textContent = `$${total}`;
+    
+    function confirmarCompra() {
+      const direccion = document.getElementById('direccion').value;
+      const metodoPago = document.querySelector('input[name="pago"]:checked').value;
+      
+      if (!direccion.trim()) {
+        mostrarAlerta("Por favor completá la dirección de envío", "error");
+        return;
+      }
+      
+      // Crear el pedido
+      const pedido = crearPedido(usuario, cart, metodoPago, direccion);
+      
+      // Vaciar el carrito
+      cart = [];
+      localStorage.setItem("cart", JSON.stringify(cart));
+      
+      // Mostrar confirmación
+      mostrarAlerta("✅ ¡Pedido realizado con éxito!", "info");
+      
+      // Redirigir a página de confirmación
+      setTimeout(() => {
+        window.location.href = `confirmacion.html?pedido=${pedido.numeroOrden}`;
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

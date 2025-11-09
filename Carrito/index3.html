@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito - Saludablemente</title>
+  <link rel="stylesheet" href="style3.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="brand">
+      <img src="../file_00000000aef871f5afb30c26ea51f4b5.png" alt="Logo">
+      <h1>Saludablemente Store</h1>
+    </div>
+    <button class="volver" onclick="window.location.href='../index.html'">← Volver</button>
+  </header>
+
+  <main class="carrito-container">
+    <h2>🛒 Tu carrito</h2>
+    <ul id="cart-items" class="cart-list"></ul>
+
+    <div class="cart-summary">
+      <p id="cart-total">Total: $0</p>
+      <div class="cart-buttons">
+        <button class="btn vaciar" onclick="vaciarCarrito()">Vaciar carrito</button>
+        <button class="btn comprar" onclick="finalizarCompra()">Finalizar compra</button>
+      </div>
+    </div>
+  </main>
+  
+  <div id="alerta" class="alerta"></div>
+  <script src="../Js/Carrito.js"></script>
+</body>
+</html>
