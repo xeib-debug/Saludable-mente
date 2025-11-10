@@ -37,8 +37,9 @@ function crearPedido(usuario, carrito, metodoPago, direccionEnvio) {
     metodoPago: metodoPago,
     
     // Estado
-    estado: "Pendiente", // Pendiente, Procesando, Enviado, Entregado
-    pagado: false
+    estado: "Pendiente", // Pendiente, Procesando, Enviado, Entregado, Cancelado
+    pagado: false,
+    cancelado: false
   };
   
   pedidos.push(nuevoPedido);
@@ -80,16 +81,59 @@ function marcarComoPagado(pedidoId) {
   return false;
 }
 
+// Cancelar pedido (usuario o admin)
+function cancelarPedido(pedidoId, motivo = "Cancelado por el usuario") {
+  const pedido = pedidos.find(p => p.id === pedidoId);
+  
+  if (!pedido) {
+    return { exito: false, mensaje: "Pedido no encontrado" };
+  }
+  
+  // Solo se pueden cancelar pedidos pendientes o procesando
+  if (pedido.estado === "Enviado" || pedido.estado === "Entregado") {
+    return { 
+      exito: false, 
+      mensaje: "No se puede cancelar un pedido que ya fue enviado o entregado" 
+    };
+  }
+  
+  if (pedido.cancelado) {
+    return { exito: false, mensaje: "Este pedido ya está cancelado" };
+  }
+  
+  pedido.estado = "Cancelado";
+  pedido.cancelado = true;
+  pedido.motivoCancelacion = motivo;
+  pedido.fechaCancelacion = new Date().toISOString();
+  
+  localStorage.setItem("pedidos", JSON.stringify(pedidos));
+  
+  return { exito: true, mensaje: "Pedido cancelado exitosamente" };
+}
+
+// Verificar si un pedido puede ser cancelado
+function puedeCancelar(pedido) {
+  return !pedido.cancelado && 
+         pedido.estado !== "Enviado" && 
+         pedido.estado !== "Entregado" &&
+         pedido.estado !== "Cancelado";
+}
+
 // Estadísticas para el admin
 function obtenerEstadisticas() {
-  const totalVentas = pedidos.reduce((sum, p) => sum + p.total, 0);
-  const totalPedidos = pedidos.length;
+  const totalVentas = pedidos
+    .filter(p => !p.cancelado)
+    .reduce((sum, p) => sum + p.total, 0);
+  
+  const totalPedidos = pedidos.filter(p => !p.cancelado).length;
   const pedidosPendientes = pedidos.filter(p => p.estado === "Pendiente").length;
+  const pedidosCancelados = pedidos.filter(p => p.cancelado).length;
   
   return {
     totalVentas,
     totalPedidos,
     pedidosPendientes,
+    pedidosCancelados,
     ventaPromedio: totalPedidos > 0 ? (totalVentas / totalPedidos).toFixed(2) : 0
   };
 }

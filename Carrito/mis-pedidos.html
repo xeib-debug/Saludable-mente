@@ -6,9 +6,10 @@
   <title>Mis Pedidos - Saludablemente</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-    head{
-        cursor: default;
+    body {
+      background: #f8fafc;
     }
+    
     .pedidos-container {
       max-width: 1000px;
       margin: 40px auto;
@@ -37,6 +38,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     
     .pedido-card {
@@ -54,13 +57,15 @@
       box-shadow: 0 4px 12px rgba(46, 139, 87, 0.1);
     }
     
-    .pedido-header {
+    .pedido-header-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
       padding-bottom: 12px;
       border-bottom: 2px solid #f1f5f9;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     
     .pedido-numero {
@@ -79,6 +84,7 @@
       gap: 8px;
       align-items: center;
       margin-bottom: 16px;
+      flex-wrap: wrap;
     }
     
     .badge-estado {
@@ -213,20 +219,35 @@
       margin-bottom: 20px;
     }
     
+    .alerta-transferencia {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    
     @media (max-width: 768px) {
+      .pedidos-container {
+        padding: 10px;
+      }
+      
       .pedidos-header {
         flex-direction: column;
         align-items: stretch;
       }
       
-      .pedido-header {
+      .pedido-header-info {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
       }
       
       .pedido-info-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .pedido-card {
+        padding: 16px;
       }
     }
   </style>
@@ -235,58 +256,138 @@
   <div class="pedidos-container">
     <div class="pedidos-header">
       <h1>📦 Mis Pedidos</h1>
-      <div style="display: flex; gap: 10px;">
-        <button class="btn ghost" onclick="window.location.href='../index.html'">← Volver al Inicio</button>
-        <button class="btn" onclick="window.location.href='index3.html'">🛒 Ir al Carrito</button>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn ghost" onclick="window.location.href='../index.html'">← Volver</button>
+        <button class="btn" onclick="window.location.href='index3.html'">🛒 Carrito</button>
       </div>
     </div>
     
     <div class="usuario-info" id="usuario-info">
-      <!-- Se llenará con JavaScript -->
+      <span>Cargando información...</span>
     </div>
     
     <div id="lista-pedidos">
-      <!-- Se llenará con JavaScript -->
+      <div style="text-align: center; padding: 40px;">
+        <p>Cargando pedidos...</p>
+      </div>
     </div>
   </div>
   
   <div id="alerta" class="alerta"></div>
   
+  <!-- Cargar scripts en orden -->
   <script src="../Js/Carrito.js"></script>
   <script src="../Js/usuarios.js"></script>
   <script src="../Js/pedidos.js"></script>
+  
   <script>
-    // Verificar si hay usuario logueado
-    if (!verificarSesion()) {
-      alert("Debes iniciar sesión para ver tus pedidos");
-      window.location.href = '../Auth/login.html';
+    // Esperar a que todos los scripts se carguen
+    window.addEventListener('DOMContentLoaded', function() {
+      inicializarPagina();
+    });
+    
+    function inicializarPagina() {
+      try {
+        // Verificar que las funciones existan
+        if (typeof verificarSesion === 'undefined') {
+          throw new Error('No se pudo cargar usuarios.js');
+        }
+        
+        if (typeof obtenerPedidosUsuario === 'undefined') {
+          throw new Error('No se pudo cargar pedidos.js');
+        }
+        
+        // Verificar sesión
+        if (!verificarSesion()) {
+          alert("Debes iniciar sesión para ver tus pedidos");
+          window.location.href = '../Auth/login.html';
+          return;
+        }
+        
+        const usuario = obtenerUsuarioActual();
+        
+        if (!usuario) {
+          alert("Error: No se pudo obtener el usuario actual");
+          window.location.href = '../Auth/login.html';
+          return;
+        }
+        
+        // DEBUG
+        console.log("=== 🐛 DEBUG PEDIDOS ===");
+        console.log("1. Usuario actual:", usuario);
+        console.log("2. ID del usuario:", usuario.id);
+        
+        const todosLosPedidos = JSON.parse(localStorage.getItem("pedidos") || "[]");
+        console.log("3. Total pedidos en sistema:", todosLosPedidos.length);
+        console.log("4. Todos los pedidos:", todosLosPedidos);
+        
+        if (todosLosPedidos.length > 0) {
+          console.log("5. Estructura del primer pedido:", todosLosPedidos[0]);
+          console.log("6. IDs de clientes:", todosLosPedidos.map(p => p.cliente.id));
+        }
+        
+        // Mostrar info del usuario
+        document.getElementById('usuario-info').innerHTML = `
+          <div>
+            <strong>🟢 ${usuario.nombre}</strong>
+            <span style="color: #64748b; margin-left: 12px;">${usuario.email}</span>
+          </div>
+          <button onclick="cerrarSesion()" style="background: none; border: none; color: #dc2626; cursor: pointer; font-weight: 600; font-size: 14px; padding: 8px 12px;">Cerrar sesión</button>
+        `;
+        
+        // Obtener pedidos del usuario
+        const pedidos = obtenerPedidosUsuario(usuario.id);
+        console.log("7. Pedidos del usuario:", pedidos);
+        console.log("======================");
+        
+        mostrarPedidos(pedidos, usuario.id, todosLosPedidos);
+        
+      } catch (error) {
+        console.error("Error al cargar la página:", error);
+        document.getElementById('lista-pedidos').innerHTML = `
+          <div class="no-pedidos">
+            <div class="no-pedidos-icon">⚠️</div>
+            <h3>Error al cargar los pedidos</h3>
+            <p>${error.message}</p>
+            <p style="font-size: 12px; color: #dc2626;">Verifica que los archivos JS estén en la carpeta correcta</p>
+            <button class="btn" onclick="location.reload()">Reintentar</button>
+          </div>
+        `;
+      }
     }
     
-    const usuario = obtenerUsuarioActual();
-    
-    // Mostrar info del usuario
-    document.getElementById('usuario-info').innerHTML = `
-      <div>
-        <strong>🟢 ${usuario.nombre}</strong>
-        <span style="color: #64748b; margin-left: 12px;">${usuario.email}</span>
-      </div>
-      <button onclick="cerrarSesion()" style="background: none; border: none; color: #dc2626; cursor: pointer; font-weight: 600; font-size: 14px;">Cerrar sesión</button>
-    `;
-    
-    // Obtener pedidos del usuario
-    const pedidos = obtenerPedidosUsuario(usuario.id);
-    const container = document.getElementById('lista-pedidos');
-    
-    if (pedidos.length === 0) {
-      container.innerHTML = `
-        <div class="no-pedidos">
-          <div class="no-pedidos-icon">📦</div>
-          <h3>Aún no has realizado ningún pedido</h3>
-          <p>¡Explorá nuestros productos y hacé tu primera compra!</p>
-          <button class="btn" onclick="window.location.href='../index.html'">Ver Productos</button>
-        </div>
-      `;
-    } else {
+    function mostrarPedidos(pedidos, usuarioId, todosLosPedidos) {
+      const container = document.getElementById('lista-pedidos');
+      container.innerHTML = '';
+      
+      if (pedidos.length === 0) {
+        // Verificar si hay pedidos pero no coinciden los IDs
+        if (todosLosPedidos.length > 0) {
+          const clienteIds = todosLosPedidos.map(p => p.cliente.id);
+          container.innerHTML = `
+            <div class="no-pedidos">
+              <div class="no-pedidos-icon">⚠️</div>
+              <h3>No se encontraron pedidos</h3>
+              <p>Tu ID: <strong>${usuarioId}</strong></p>
+              <p>IDs en sistema: <strong>${clienteIds.join(', ')}</strong></p>
+              <p style="color: #dc2626; font-size: 14px;">Los IDs no coinciden. Probá cerrar sesión y volver a entrar.</p>
+              <button class="btn" onclick="window.location.href='../index.html'">Ver Productos</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="no-pedidos">
+              <div class="no-pedidos-icon">📦</div>
+              <h3>Aún no has realizado ningún pedido</h3>
+              <p>¡Explorá nuestros productos y hacé tu primera compra!</p>
+              <button class="btn" onclick="window.location.href='../index.html'">Ver Productos</button>
+            </div>
+          `;
+        }
+        return;
+      }
+      
+      // Mostrar pedidos
       const badgeClasses = {
         'Pendiente': 'badge-pendiente',
         'Procesando': 'badge-procesando',
@@ -298,11 +399,8 @@
         const card = document.createElement('div');
         card.className = 'pedido-card';
         
-        // Calcular subtotal de productos
-        const subtotal = pedido.productos.reduce((sum, p) => sum + p.precio, 0);
-        
         card.innerHTML = `
-          <div class="pedido-header">
+          <div class="pedido-header-info">
             <div>
               <div class="pedido-numero">Pedido ${pedido.numeroOrden}</div>
               <div class="pedido-fecha">${pedido.fechaFormateada}</div>
@@ -310,7 +408,7 @@
           </div>
           
           <div class="pedido-estado">
-            <span class="badge-estado ${badgeClasses[pedido.estado]}">${pedido.estado}</span>
+            <span class="badge-estado ${badgeClasses[pedido.estado] || 'badge-pendiente'}">${pedido.estado}</span>
             <span class="badge-estado ${pedido.pagado ? 'badge-pagado' : 'badge-sin-pagar'}">
               ${pedido.pagado ? '✓ Pagado' : '⏳ Pendiente de pago'}
             </span>
@@ -339,7 +437,7 @@
             <div class="pedido-total">
               <div>
                 <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">
-                  Subtotal: $${subtotal} ${pedido.envio > 0 ? `+ Envío: $${pedido.envio}` : '+ Envío GRATIS'}
+                  Subtotal: $${pedido.subtotal} ${pedido.envio > 0 ? `+ Envío: $${pedido.envio}` : '+ Envío GRATIS'}
                 </div>
                 <span class="total-label">Total:</span>
               </div>
@@ -348,7 +446,7 @@
           </div>
           
           ${!pedido.pagado && pedido.metodoPago === 'transferencia' ? `
-            <div style="background: #eff6ff; border: 2px solid #3b82f6; padding: 12px; border-radius: 8px; margin-top: 12px;">
+            <div class="alerta-transferencia">
               <strong style="color: #1e40af;">💳 Datos para transferencia:</strong><br>
               <small style="color: #64748b; line-height: 1.6;">
                 CBU: 0000003100000000000000 | Alias: SALUDABLE.MP<br>
@@ -356,11 +454,73 @@
               </small>
             </div>
           ` : ''}
+          
+          ${pedido.cancelado ? `
+            <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 12px; margin-top: 12px; border-radius: 4px;">
+              <strong style="color: #991b1b;">❌ Pedido cancelado</strong><br>
+              <small style="color: #64748b;">Motivo: ${pedido.motivoCancelacion || 'No especificado'}</small>
+            </div>
+          ` : (pedido.estado !== 'Enviado' && pedido.estado !== 'Entregado' ? `
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+              <button 
+                onclick="cancelarMiPedido(${pedido.id})" 
+                style="background: #dc2626; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s;"
+                onmouseover="this.style.background='#b91c1c'"
+                onmouseout="this.style.background='#dc2626'">
+                Cancelar pedido
+              </button>
+              <small style="display: block; color: #64748b; margin-top: 8px; font-size: 12px;">
+                Solo puedes cancelar pedidos que no hayan sido enviados
+              </small>
+            </div>
+          ` : '')}
         `;
         
         container.appendChild(card);
       });
     }
+    // Cancelar pedido (solo si no fue enviado o entregado)
+function cancelarMiPedido(pedidoId) {
+  let pedidos = JSON.parse(localStorage.getItem("pedidos") || "[]");
+  const pedido = pedidos.find(p => p.id === pedidoId);
+
+  if (!pedido) {
+    mostrarAlerta("No se encontró el pedido.", "error");
+    return;
+  }
+
+  // Validar si ya fue enviado o entregado
+  if (pedido.estado === "Enviado" || pedido.estado === "Entregado") {
+    mostrarAlerta("⛔ Este pedido ya fue enviado y no puede cancelarse.", "error");
+    return;
+  }
+
+  // Evitar cancelación después de cierto tiempo (ej. 2 minutos desde creación)
+  const ahora = Date.now();
+  const tiempoCreacion = new Date(pedido.fecha).getTime();
+  const limiteCancelacion = 10 * 60 * 1000; // 2 minutos (puedes cambiarlo)
+
+  if (ahora - tiempoCreacion > limiteCancelacion) {
+    mostrarAlerta("⚠️ El tiempo para cancelar este pedido ha expirado.", "error");
+    return;
+  }
+
+  // Confirmar acción
+  const confirmar = confirm("¿Seguro que querés cancelar este pedido?");
+  if (!confirmar) return;
+
+  // Marcar como cancelado
+  pedido.cancelado = true;
+  pedido.motivoCancelacion = "Cancelado por el usuario";
+  pedido.estado = "Cancelado";
+
+  // Guardar cambios
+  localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+  mostrarAlerta("❌ Pedido cancelado correctamente.", "info");
+  setTimeout(() => location.reload(), 1000);
+}
+
   </script>
 </body>
 </html>

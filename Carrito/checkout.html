@@ -238,6 +238,11 @@
     
     // Cargar datos del usuario
     const usuario = obtenerUsuarioActual();
+    
+    // DEBUGGING: Verificar estructura del usuario
+    console.log("👤 Usuario actual:", usuario);
+    console.log("🆔 ID del usuario:", usuario.id);
+    
     document.getElementById('usuario-info').innerHTML = `
       <strong>🟢 Sesión iniciada como:</strong> ${usuario.nombre} (${usuario.email})
       <button onclick="cerrarSesion()" style="float: right; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: 600;">Cerrar sesión</button>
@@ -245,8 +250,8 @@
     
     document.getElementById('nombre').value = usuario.nombre;
     document.getElementById('email').value = usuario.email;
-    document.getElementById('telefono').value = usuario.telefono;
-    document.getElementById('direccion').value = usuario.direccion;
+    document.getElementById('telefono').value = usuario.telefono || '';
+    document.getElementById('direccion').value = usuario.direccion || '';
     
     // Mostrar resumen de productos
     const resumenDiv = document.getElementById('resumen-productos');
@@ -277,8 +282,19 @@
         return;
       }
       
+      // DEBUGGING
+      console.log("🛒 Creando pedido...");
+      console.log("Usuario:", usuario);
+      console.log("Carrito:", cart);
+      console.log("Método de pago:", metodoPago);
+      console.log("Dirección:", direccion);
+      
       // Crear el pedido
       const pedido = crearPedido(usuario, cart, metodoPago, direccion);
+      
+      // DEBUGGING
+      console.log("✅ Pedido creado:", pedido);
+      console.log("📦 Todos los pedidos:", JSON.parse(localStorage.getItem("pedidos")));
       
       // Vaciar el carrito
       cart = [];

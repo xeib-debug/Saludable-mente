@@ -3,43 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Saludablemente</title>
+  <title>Admin Login - Saludablemente</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-    head{
-        cursor: default;
+    body {
+      background: linear-gradient(135deg, #2E8B57, #68c28f);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .admin-login-container {
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 40px;
+    
+    .login-container {
       background: white;
+      padding: 40px;
       border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .login-header {
       text-align: center;
+      margin-bottom: 30px;
     }
     
-    .admin-login-container h1 {
+    .login-header h1 {
       color: #2E8B57;
-      margin-bottom: 8px;
+      margin: 0 0 8px 0;
     }
     
-    .admin-login-container p {
+    .login-header p {
       color: #64748b;
-      margin-bottom: 24px;
+      margin: 0;
+      font-size: 14px;
     }
     
     .form-group {
-      margin-bottom: 18px;
-      text-align: left;
+      margin-bottom: 20px;
     }
     
     .form-group label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 600;
       color: #334155;
-      font-size: 14px;
     }
     
     .form-group input {
@@ -48,6 +57,7 @@
       border: 2px solid #e2e8f0;
       border-radius: 8px;
       font-size: 14px;
+      transition: all 0.3s;
     }
     
     .form-group input:focus {
@@ -55,68 +65,227 @@
       border-color: #2E8B57;
     }
     
-    .error-message {
-      color: #dc2626;
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: #2E8B57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-login:hover {
+      background: #256d45;
+    }
+    
+    .btn-volver {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: #64748b;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
       font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
       margin-top: 12px;
+      transition: all 0.3s;
+    }
+    
+    .btn-volver:hover {
+      background: #f8fafc;
+    }
+    
+    .alert {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
       display: none;
     }
     
-    .error-message.show {
+    .alert.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
       display: block;
+    }
+    
+    .alert.info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+      display: block;
+    }
+    
+    .intentos-info {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 16px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="admin-login-container">
-    <h1>🔐 Acceso Admin</h1>
-    <p>Ingresá tus credenciales de administrador</p>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>🔐 Acceso Administrativo</h1>
+      <p>Panel de administración Saludablemente</p>
+    </div>
     
-    <form onsubmit="event.preventDefault(); verificarAdmin();">
+    <div id="alerta-mensaje" class="alert"></div>
+    
+    <form onsubmit="iniciarSesionAdmin(event)">
       <div class="form-group">
-        <label for="admin-user">Usuario</label>
-        <input type="text" id="admin-user" placeholder="admin" required>
+        <label for="email">Email del propietario</label>
+        <input 
+          type="email" 
+          id="email" 
+          required 
+          placeholder="admin@saludablemente.com"
+          autocomplete="username"
+        >
       </div>
       
       <div class="form-group">
-        <label for="admin-pass">Contraseña</label>
-        <input type="password" id="admin-pass" placeholder="••••••••" required>
+        <label for="password">Contraseña</label>
+        <input 
+          type="password" 
+          id="password" 
+          required 
+          placeholder="••••••••"
+          autocomplete="current-password"
+        >
       </div>
       
-      <button type="submit" class="btn" style="width: 100%;">Ingresar al Panel</button>
-      
-      <p class="error-message" id="error-msg">❌ Credenciales incorrectas</p>
+      <button type="submit" class="btn-login">Iniciar Sesión</button>
+      <button type="button" class="btn-volver" onclick="window.location.href='../index.html'">
+        ← Volver al sitio
+      </button>
     </form>
     
-    <div style="margin-top: 20px;">
-      <a href="../index.html" style="color: #2E8B57; text-decoration: none; font-weight: 600;">← Volver al inicio</a>
-    </div>
+    <div id="intentos-info" class="intentos-info" style="display: none;"></div>
   </div>
   
-  <div id="alerta" class="alerta"></div>
-  
-  <script src="../Js/Carrito.js"></script>
   <script>
-    // Credenciales de admin (cambialas por las que quieras)
-    const ADMIN_USER = "LucasZalazar";
-    const ADMIN_PASS = "saludable2024";
+    // 🔒 CONFIGURACIÓN DE SEGURIDAD
+    const ADMIN_CONFIG = {
+      email: "admin@saludablemente.com", // Cambia esto por tu email
+      password: "admin2024", // Cambia esto por tu contraseña segura
+      maxIntentos: 3,
+      tiempoBloqueo: 15 * 60 * 1000 // 15 minutos
+    };
     
-    function verificarAdmin() {
-      const user = document.getElementById('admin-user').value;
-      const pass = document.getElementById('admin-pass').value;
+    // Verificar si está bloqueado
+    function verificarBloqueo() {
+      const bloqueado = localStorage.getItem("adminBloqueado");
+      const tiempoBloqueo = localStorage.getItem("adminTiempoBloqueo");
       
-      if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        // Guardar sesión de admin
-        localStorage.setItem("adminLogueado", "true");
-        localStorage.setItem("adminLoginTime", Date.now());
+      if (bloqueado && tiempoBloqueo) {
+        const tiempoRestante = parseInt(tiempoBloqueo) - Date.now();
         
-        // Redirigir al panel
-        window.location.href = "admin.html";
-      } else {
-        document.getElementById('error-msg').classList.add('show');
+        if (tiempoRestante > 0) {
+          const minutos = Math.ceil(tiempoRestante / 60000);
+          mostrarAlerta(`Acceso bloqueado. Intenta nuevamente en ${minutos} minutos.`, 'error');
+          document.querySelector('.btn-login').disabled = true;
+          document.getElementById('intentos-info').style.display = 'block';
+          document.getElementById('intentos-info').textContent = `⏰ Bloqueado por ${minutos} minuto(s)`;
+          return true;
+        } else {
+          // Desbloquear
+          localStorage.removeItem("adminBloqueado");
+          localStorage.removeItem("adminTiempoBloqueo");
+          localStorage.removeItem("adminIntentos");
+        }
+      }
+      
+      return false;
+    }
+    
+    function generarToken(email, timestamp) {
+      return btoa(email + timestamp + "saludablemente-admin-2024");
+    }
+    
+    function iniciarSesionAdmin(event) {
+      event.preventDefault();
+      
+      if (verificarBloqueo()) {
+        return;
+      }
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Verificar credenciales
+      if (email === ADMIN_CONFIG.email && password === ADMIN_CONFIG.password) {
+        // Login exitoso
+        const timestamp = Date.now().toString();
+        const token = generarToken(email, timestamp);
+        
+        localStorage.setItem("adminToken", token);
+        localStorage.setItem("adminEmail", email);
+        localStorage.setItem("adminLoginTime", timestamp);
+        
+        // Limpiar intentos fallidos
+        localStorage.removeItem("adminIntentos");
+        localStorage.removeItem("adminBloqueado");
+        localStorage.removeItem("adminTiempoBloqueo");
+        
+        mostrarAlerta('✓ Acceso concedido', 'info');
+        
         setTimeout(() => {
-          document.getElementById('error-msg').classList.remove('show');
-        }, 3000);
+          window.location.href = "admin.html";
+        }, 500);
+        
+      } else {
+        // Login fallido
+        let intentos = parseInt(localStorage.getItem("adminIntentos") || "0") + 1;
+        localStorage.setItem("adminIntentos", intentos.toString());
+        
+        const intentosRestantes = ADMIN_CONFIG.maxIntentos - intentos;
+        
+        if (intentos >= ADMIN_CONFIG.maxIntentos) {
+          // Bloquear acceso
+          localStorage.setItem("adminBloqueado", "true");
+          localStorage.setItem("adminTiempoBloqueo", (Date.now() + ADMIN_CONFIG.tiempoBloqueo).toString());
+          mostrarAlerta(`❌ Demasiados intentos fallidos. Acceso bloqueado por 15 minutos.`, 'error');
+          document.querySelector('.btn-login').disabled = true;
+          verificarBloqueo();
+        } else {
+          mostrarAlerta(`✗ Credenciales incorrectas. Te quedan ${intentosRestantes} intento(s).`, 'error');
+          document.getElementById('intentos-info').style.display = 'block';
+          document.getElementById('intentos-info').textContent = `⚠️ ${intentosRestantes} intento(s) restante(s)`;
+        }
+      }
+    }
+    
+    function mostrarAlerta(mensaje, tipo) {
+      const alerta = document.getElementById('alerta-mensaje');
+      alerta.textContent = mensaje;
+      alerta.className = `alert ${tipo}`;
+    }
+    
+    // Verificar al cargar
+    verificarBloqueo();
+    
+    // Verificar si ya hay sesión activa
+    const adminToken = localStorage.getItem("adminToken");
+    const loginTime = localStorage.getItem("adminLoginTime");
+    
+    if (adminToken && loginTime) {
+      const SESION_DURACION = 2 * 60 * 60 * 1000;
+      if ((Date.now() - parseInt(loginTime)) < SESION_DURACION) {
+        mostrarAlerta('Ya tienes una sesión activa. Redirigiendo...', 'info');
+        setTimeout(() => {
+          window.location.href = "admin.html";
+        }, 1000);
       }
     }
   </script>

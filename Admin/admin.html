@@ -350,8 +350,10 @@
               <option value="Enviado">Enviado</option>
               <option value="Entregado">Entregado</option>
             </select>
-            
+
             ${!pedido.pagado ? `<button class="btn-small btn-pagado" onclick="marcarPagado(${pedido.id})">Marcar como pagado</button>` : ''}
+
+            <button class="btn-small" style="background:#ff4d4d;color:white;" onclick="eliminarPedido(${pedido.id})">Eliminar</button>
           </div>
         `;
         
@@ -398,6 +400,63 @@
     
     // Mostrar pedidos al cargar
     mostrarPedidos();
+    // ---------- Eliminar pedido ----------
+    function obtenerTodosPedidosLocal() {
+      // intenta usar la función existente si está en pedidos.js
+      if (typeof obtenerTodosPedidos === 'function') {
+        return obtenerTodosPedidos();
+      }
+      // fallback: leer directamente de localStorage bajo 'pedidos'
+      try {
+        return JSON.parse(localStorage.getItem('pedidos')) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function guardarPedidosLocal(pedidos) {
+      // intenta usar función existente si está
+      if (typeof guardarTodosPedidos === 'function') {
+        return guardarTodosPedidos(pedidos);
+      }
+      // fallback: guardar en localStorage
+      localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    }
+
+    function eliminarPedido(pedidoId) {
+      // pedir confirmación por seguridad
+      if (!confirm('¿Seguro que querés eliminar este pedido? Esta acción no puede deshacerse.')) return;
+
+      // obtener lista actual
+      const pedidos = obtenerTodosPedidosLocal();
+      const idx = pedidos.findIndex(p => p.id === pedidoId || p.numeroOrden === pedidoId || p.numeroOrden == pedidoId);
+      if (idx === -1) {
+        mostrarAlerta('No se encontró el pedido.', 'error');
+        return;
+      }
+
+      // quitar el pedido
+      pedidos.splice(idx, 1);
+      guardarPedidosLocal(pedidos);
+
+      // actualizar estadísticas si tu pedidos.js tiene función para ello; si no, recalcular aquí:
+      if (typeof actualizarEstadisticas === 'function') {
+        actualizarEstadisticas();
+      } else {
+        // recalcular simples
+        const totalPedidos = pedidos.length;
+        const totalVentas = pedidos.reduce((s, p) => s + (p.total || 0), 0);
+        const pendientes = pedidos.filter(p => p.estado === 'Pendiente' || !p.pagado).length;
+        document.getElementById('stat-ventas').textContent = `$${totalVentas}`;
+        document.getElementById('stat-pedidos').textContent = totalPedidos;
+        document.getElementById('stat-pendientes').textContent = pendientes;
+        document.getElementById('stat-promedio').textContent = `$${(totalPedidos ? Math.round(totalVentas / totalPedidos) : 0)}`;
+      }
+
+      mostrarAlerta('Pedido eliminado correctamente.', 'info');
+      mostrarPedidos(); // refresca UI
+    }
+
   </script>
 </body>
 </html>

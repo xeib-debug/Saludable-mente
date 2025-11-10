@@ -20,6 +20,20 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .usuarios-header h1 {
+      margin: 0;
+      color: #2E8B57;
+    }
+    
+    .admin-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     
     .usuarios-table {
@@ -27,11 +41,13 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow-x: auto;
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 800px;
     }
     
     thead {
@@ -66,6 +82,18 @@
       background: #f1f5f9;
       padding: 4px 8px;
       border-radius: 4px;
+      white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+      .usuarios-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .usuarios-table {
+        overflow-x: auto;
+      }
     }
   </style>
 </head>
@@ -73,10 +101,16 @@
   <div class="usuarios-container">
     <div class="usuarios-header">
       <h1>👥 Usuarios Registrados</h1>
-      <div>
-        <button class="btn ghost" onclick="window.location.href='admin.html'">← Volver al Panel</button>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn ghost" onclick="cerrarSesionAdmin()">🚪 Cerrar Sesión</button>
         <button class="btn" onclick="exportarUsuarios()">📥 Exportar CSV</button>
       </div>
+    </div>
+    
+    <!-- Navegación -->
+    <div class="admin-nav">
+      <button class="btn ghost" onclick="window.location.href='admin.html'">📦 Pedidos</button>
+      <button class="btn" onclick="window.location.href='usuarios.html'" style="background: #2E8B57;">👥 Usuarios</button>
     </div>
     
     <div class="usuarios-table">
@@ -103,36 +137,91 @@
   <script src="../Js/Carrito.js"></script>
   <script src="../Js/usuarios.js"></script>
   <script>
-    // Verificar acceso de admin
-    const adminLogueado = localStorage.getItem("adminLogueado");
-    if (!adminLogueado) {
-      alert("Acceso denegado");
+    // 🔒 SEGURIDAD - Mismo sistema que admin.html
+    function verificarAccesoAdmin() {
+      const adminToken = localStorage.getItem("adminToken");
+      const adminEmail = localStorage.getItem("adminEmail");
+      const loginTime = localStorage.getItem("adminLoginTime");
+      
+      const SESION_DURACION = 2 * 60 * 60 * 1000;
+      
+      if (!adminToken || !adminEmail || !loginTime) {
+        redirigirALogin("No hay sesión activa");
+        return false;
+      }
+      
+      if ((Date.now() - parseInt(loginTime)) > SESION_DURACION) {
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminEmail");
+        localStorage.removeItem("adminLoginTime");
+        redirigirALogin("Sesión expirada");
+        return false;
+      }
+      
+      const tokenEsperado = generarToken(adminEmail, loginTime);
+      if (adminToken !== tokenEsperado) {
+        redirigirALogin("Token inválido");
+        return false;
+      }
+      
+      return true;
+    }
+    
+    function generarToken(email, timestamp) {
+      return btoa(email + timestamp + "saludablemente-admin-2024");
+    }
+    
+    function redirigirALogin(mensaje) {
+      alert(mensaje);
       window.location.href = "admin-login.html";
     }
     
-    // Cargar usuarios
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const tbody = document.getElementById('tabla-usuarios');
+    function cerrarSesionAdmin() {
+      if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminEmail");
+        localStorage.removeItem("adminLoginTime");
+        mostrarAlerta("Sesión cerrada", "info");
+        setTimeout(() => {
+          window.location.href = "../index.html";
+        }, 1000);
+      }
+    }
     
-    if (usuarios.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="no-usuarios">No hay usuarios registrados aún 👤</td></tr>';
+    // Verificar acceso
+    if (!verificarAccesoAdmin()) {
+      // Ya se redirigió
     } else {
-      usuarios.forEach(usuario => {
-        const fecha = new Date(usuario.fechaRegistro).toLocaleDateString('es-AR');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>#${usuario.id}</strong></td>
-          <td>${usuario.nombre}</td>
-          <td>${usuario.email}</td>
-          <td>${usuario.telefono}</td>
-          <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${usuario.direccion}</td>
-          <td><span class="badge-fecha">${fecha}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      cargarUsuarios();
+    }
+    
+    function cargarUsuarios() {
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+      const tbody = document.getElementById('tabla-usuarios');
+      
+      if (usuarios.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="no-usuarios">No hay usuarios registrados aún 👤</td></tr>';
+      } else {
+        tbody.innerHTML = '';
+        usuarios.forEach(usuario => {
+          const fecha = new Date(usuario.fechaRegistro).toLocaleDateString('es-AR');
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>#${usuario.id}</strong></td>
+            <td>${usuario.nombre}</td>
+            <td>${usuario.email}</td>
+            <td>${usuario.telefono || 'N/A'}</td>
+            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${usuario.direccion || 'N/A'}</td>
+            <td><span class="badge-fecha">${fecha}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
     }
     
     function exportarUsuarios() {
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+      
       if (usuarios.length === 0) {
         mostrarAlerta("No hay usuarios para exportar", "error");
         return;
@@ -141,10 +230,10 @@
       let csv = "ID,Nombre,Email,Teléfono,Dirección,Fecha Registro\n";
       usuarios.forEach(u => {
         const fecha = new Date(u.fechaRegistro).toLocaleDateString('es-AR');
-        csv += `${u.id},"${u.nombre}","${u.email}","${u.telefono}","${u.direccion}",${fecha}\n`;
+        csv += `${u.id},"${u.nombre}","${u.email}","${u.telefono || ''}","${u.direccion || ''}",${fecha}\n`;
       });
       
-      const blob = new Blob([csv], { type: 'text/csv' });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
