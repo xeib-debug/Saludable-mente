@@ -102,7 +102,11 @@
       text-align: center;
       transition: all 0.3s;
     }
-    
+
+    .transferencia{
+      text-decoration: line-through;
+    }
+
     .metodo-pago input[type="radio"] {
       display: none;
     }
@@ -167,7 +171,7 @@
         
         <div class="metodo-pago">
           <input type="radio" name="pago" id="transferencia" value="transferencia" checked>
-          <label for="transferencia">
+          <label for="transferencia" class="transferencia">
             💳 Transferencia
           </label>
           
@@ -178,7 +182,14 @@
         </div>
         
         <div class="alert-info">
-          ℹ️ Después de confirmar recibirás un email con los datos para realizar el pago.
+          ℹ️ Por ahora no aceptamos transferencias, efectivo o Mercado Pago unicamente.
+        </div>
+        <!-- Apartado dinámico para información de Mercado Pago -->
+        <div id="info-mercadopago" style="display:none; margin-top:16px; background:#f1f5f9; padding:12px; border-radius:8px;">
+          <strong>💳 Datos de Mercado Pago:</strong>
+          <p style="margin-top:6px;">Alias: <b>saludablemente.mp</b></p>
+          <p>CVU: <b>0000003100001234567890</b></p>
+          <small style="color:#475569;">Una vez realizado el pago, enviá el comprobante al correo de contacto.</small>
         </div>
       </div>
       
@@ -309,5 +320,19 @@
       }, 1500);
     }
   </script>
+  <script>
+  // Mostrar info de Mercado Pago al seleccionarlo
+  const mpInfo = document.getElementById('info-mercadopago');
+  const mpRadio = document.getElementById('mercadopago');
+  const transRadio = document.getElementById('transferencia');
+
+  mpRadio.addEventListener('change', () => {
+    if (mpRadio.checked) mpInfo.style.display = 'block';
+  });
+
+  transRadio.addEventListener('change', () => {
+    if (transRadio.checked) mpInfo.style.display = 'none';
+  });
+</script>
 </body>
 </html>
