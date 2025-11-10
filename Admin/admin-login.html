@@ -228,46 +228,61 @@
       const password = document.getElementById('password').value;
       
       // Verificar credenciales
-      if (email === ADMIN_CONFIG.email && password === ADMIN_CONFIG.password) {
-        // Login exitoso
-        const timestamp = Date.now().toString();
-        const token = generarToken(email, timestamp);
-        
-        localStorage.setItem("adminToken", token);
-        localStorage.setItem("adminEmail", email);
-        localStorage.setItem("adminLoginTime", timestamp);
-        
-        // Limpiar intentos fallidos
-        localStorage.removeItem("adminIntentos");
-        localStorage.removeItem("adminBloqueado");
-        localStorage.removeItem("adminTiempoBloqueo");
-        
-        mostrarAlerta('✓ Acceso concedido', 'info');
-        
-        setTimeout(() => {
-          window.location.href = "admin.html";
-        }, 500);
-        
-      } else {
-        // Login fallido
-        let intentos = parseInt(localStorage.getItem("adminIntentos") || "0") + 1;
-        localStorage.setItem("adminIntentos", intentos.toString());
-        
-        const intentosRestantes = ADMIN_CONFIG.maxIntentos - intentos;
-        
-        if (intentos >= ADMIN_CONFIG.maxIntentos) {
-          // Bloquear acceso
-          localStorage.setItem("adminBloqueado", "true");
-          localStorage.setItem("adminTiempoBloqueo", (Date.now() + ADMIN_CONFIG.tiempoBloqueo).toString());
-          mostrarAlerta(`❌ Demasiados intentos fallidos. Acceso bloqueado por 15 minutos.`, 'error');
-          document.querySelector('.btn-login').disabled = true;
-          verificarBloqueo();
-        } else {
-          mostrarAlerta(`✗ Credenciales incorrectas. Te quedan ${intentosRestantes} intento(s).`, 'error');
-          document.getElementById('intentos-info').style.display = 'block';
-          document.getElementById('intentos-info').textContent = `⚠️ ${intentosRestantes} intento(s) restante(s)`;
-        }
-      }
+      // Buscar coincidencia en la lista de cuentas
+const cuentaValida = ADMIN_CUENTAS.find(
+  c => c.email === email && c.password === password
+);
+
+if (cuentaValida) {
+  // Login exitoso
+  const timestamp = Date.now().toString();
+  const token = generarToken(email, timestamp);
+
+  localStorage.setItem("adminToken", token);
+  localStorage.setItem("adminEmail", email);
+  localStorage.setItem("adminLoginTime", timestamp);
+
+  // Limpiar intentos fallidos
+  localStorage.removeItem("adminIntentos");
+  localStorage.removeItem("adminBloqueado");
+  localStorage.removeItem("adminTiempoBloqueo");
+
+  mostrarAlerta(`✓ Acceso concedido como ${email}`, "info");
+
+  setTimeout(() => {
+    window.location.href = "admin.html";
+  }, 500);
+
+} else {
+  // Login fallido (igual que antes)
+  let intentos = parseInt(localStorage.getItem("adminIntentos") || "0") + 1;
+  localStorage.setItem("adminIntentos", intentos.toString());
+
+  const intentosRestantes = CONFIG_LOGIN.maxIntentos - intentos;
+
+  if (intentos >= CONFIG_LOGIN.maxIntentos) {
+    localStorage.setItem("adminBloqueado", "true");
+    localStorage.setItem(
+      "adminTiempoBloqueo",
+      (Date.now() + CONFIG_LOGIN.tiempoBloqueo).toString()
+    );
+    mostrarAlerta(
+      "❌ Demasiados intentos fallidos. Acceso bloqueado por 15 minutos.",
+      "error"
+    );
+    document.querySelector(".btn-login").disabled = true;
+    verificarBloqueo();
+  } else {
+    mostrarAlerta(
+      `✗ Credenciales incorrectas. Te quedan ${intentosRestantes} intento(s).`,
+      "error"
+    );
+    document.getElementById("intentos-info").style.display = "block";
+    document.getElementById(
+      "intentos-info"
+    ).textContent = `⚠️ ${intentosRestantes} intento(s) restante(s)`;
+  }
+}
     }
     
     function mostrarAlerta(mensaje, tipo) {
@@ -295,4 +310,3 @@
   </script>
 </body>
 </html>
-
