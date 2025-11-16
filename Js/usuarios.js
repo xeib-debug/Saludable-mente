@@ -50,7 +50,7 @@ function cerrarSesion() {
   localStorage.removeItem("usuarioActual");
   mostrarAlerta("Sesión cerrada", "info");
   setTimeout(() => {
-    window.location.href = "../index.html";
+    window.location.href = "../home.html";
   }, 1000);
 }
 

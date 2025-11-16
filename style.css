@@ -128,13 +128,13 @@ nav a{
 
 .btn:hover{
   transform: scale(1.05) translateZ(0);
-  background-color: rgb(30, 90, 56);
   display: inline-block;
   transition: transform 0.3s ease;
 }
 
 .btn:active{
-  transform: scale(0.95) translateZ(0)
+  transform: scale(0.95) translateZ(0);
+  background-color: rgb(30, 90, 56);
 }
 
 .productosDes {
@@ -158,14 +158,14 @@ nav a{
 }
 
 .btn2:hover{
-  background-color: rgb(30, 90, 56);
   color: rgb(255, 255, 255);
   text-decoration: none;
   transform: scale(1.05) translateZ(0);
 }
 
 .btn2:active{
-  transform: scale(0.95) translateZ(0)
+  transform: scale(0.95) translateZ(0);
+  background-color: rgb(30, 90, 56);
 }
 
 .btn.ghost2{
@@ -176,11 +176,12 @@ nav a{
 
 .btn.ghost2:hover{
   transform: scale(1.05) translateZ(0);
-  background-color: rgba(27, 82, 51, 0.14)
+  background:transparent;
 }
 
 .btn.ghost2:active{
-  transform: scale(0.95) translateZ(0)
+  transform: scale(0.95) translateZ(0);
+  background-color: rgba(27, 82, 51, 0.14);
 }
 
 
@@ -313,8 +314,8 @@ main{
 /* Carrito */
 
 .Carrito{
-  font-size: 3vh;
-  min-width: 50vh;
+  font-size: 25px;
+  min-width: 30rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -698,7 +699,11 @@ footer {
     align-items: center;
     text-align: center;
     gap: 10px;
-    min-width: 100%;
+    min-width: auto;
+  }
+
+  .Carrito-texto{
+    display: none;
   }
 
   .grid {

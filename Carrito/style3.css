@@ -37,12 +37,21 @@ header {
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 15px;
   cursor: pointer;
   font-weight: 600;
+  transition: 0.3s;
 }
+
 .volver:hover {
-  background: #256d45;
+  transform: scale(1.05) translateZ(0);
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.volver:active{
+  transform: scale(0.95) translateZ(0);
+  background-color: rgb(30, 90, 56);
 }
 
 /* === Carrito === */
@@ -75,7 +84,7 @@ h2 {
   padding: 14px 20px;
   border-radius: 10px;
   margin-bottom: 12px;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 .cart-list li:hover {
   background: #292929;
@@ -115,13 +124,20 @@ h2 {
 .btn {
   padding: 10px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: 0.3s;
 }
 .btn:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) translateZ(0);
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn:active{
+  transform: scale(0.95) translateZ(0);
+    background-color: rgb(30, 90, 56);
 }
 
 .vaciar {
@@ -183,6 +199,7 @@ h2 {
   }
 
   .buttons {
+    margin: 0;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;

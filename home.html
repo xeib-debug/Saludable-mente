@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saludablemente - Productos saludables</title>
+  <meta name="description" content="Saludablemente: productos saludables y consumibles para un estilo de vida nutritivo y equilibrado. Calidad, sabor y bienestar en un sólo lugar." />
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:," />
+  <link rel="icon" type="image/png" href="file_00000000aef871f5afb30c26ea51f4b5.png">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="WhatsApp Image 2025-11-05 at 21.20.37.jpeg" alt="Logo" class="logo">
+      <div class="brand-text">
+        <div class="brand-title">Saludablemente</div>
+        <div class="brand-sub">Productos saludables • Consumibles</div>
+      </div>
+    </div>
+
+    <nav class="header-right">
+      <a href="#productos">Productos</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+      <button onclick="window.location.href='Auth/login.html'" class="btn2">Login & Register</button>
+    </nav>
+  </header>
+
+  <div class="body2">
+    
+  <section class="hero">
+    <div class="hero-left">
+      <h1>Alimentación natural, sabor verdadero.</h1>
+      <p>Saludablemente ofrece productos consumibles seleccionados con criterio: ingredientes reales, procesos transparentes y sabores que respalden tu bienestar cotidiano.</p>
+      <div class="cta">
+        <button class="btn" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">Descubrí los sabores</button>
+        <button class="btn ghost2" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Quiero cuidarme</button>
+      </div>
+      <div class="hero-footer">Envíos a todo el país • Pago con tarjeta y transferencia • Productos locales y orgánicos cuando es posible</div>
+    </div>
+
+    <div class="hero-aside" role="img" aria-label="Productos saludables"></div>
+  </section>
+  <main>
+    <section class="icono-mensaje">
+      <div class="grid">
+
+        <article class="cardinfo">
+            <div class="card-row">
+            <div>
+              <div>Ingredientes 100% reales y locales</div>
+        </article>
+
+        <article class="cardinfo">
+            <div class="card-row">
+            <div>
+              <div>Sin ultraprocesados ni químicos</div>
+        </article>
+
+        <article class="cardinfo">
+            <div class="card-row">
+            <div>
+              <div>Productos hechos con amor y propósito</div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+  <main>
+    <section id="productos" class="productos">
+      <section class="productosDes">
+       <h2>Productos destacados</h2>
+       <button onclick="window.location.href='Productos/productos.html'" class="btn2" >Mas Productos</button>
+      </section>      
+      <div class="grid">
+        <article class="card">
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=60')"></div>
+          <div class="card-row">
+            <div>
+              <div class="card-title">Granola artesanal</div>
+              <div class="card-sub">Avena integral, nueces y miel de flor.</div>
+            </div>
+            <div class="price">$950</div>
+          </div>
+          <div class="card-actions">
+            <span class="badge">Consumible</span>
+            <button class="btn" onclick="agregarAlCarrito('Granola artesanal', 950)">Agregar</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4fICyIyRU4lGLyxm6HHBK8QY5S4hoQsQYUg&s')"></div>
+          <div class="card-row">
+            <div>
+              <div class="card-title">Mermelada sin azúcar</div>
+              <div class="card-sub">Fresas y chía, endulzada naturalmente.</div>
+            </div>
+            <div class="price">$720</div>
+          </div>
+          <div class="card-actions">
+            <span class="badge">Consumible</span>
+            <button class="btn" onclick="agregarAlCarrito('Mermelada sin azúcar', 720)">Agregar</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRicK2qC0cllPGOkPLk--gZbJPCOT--z5-TzQ&s')"></div>
+          <div class="card-row">
+            <div>
+              <div class="card-title">Batido proteico natural</div>
+              <div class="card-sub">Proteína vegetal, cacao y banana deshidratada.</div>
+            </div>
+            <div class="price">$1.200</div>
+          </div>
+          <div class="card-actions">
+            <span class="badge">Consumible</span>
+            <button class="btn" onclick="agregarAlCarrito('Batido proteico natural', 1200)">Agregar</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=60')"></div>
+          <div class="card-row">
+            <div>
+              <div class="card-title">Snacks de legumbres</div>
+              <div class="card-sub">Crocs horneados, sal marina y especias.</div>
+            </div>
+            <div class="price">$490</div>
+          </div>
+          <div class="card-actions">
+            <span class="badge">Consumible</span>
+            <button class="btn" onclick="agregarAlCarrito('Snacks de legumbres', 490)">Agregar</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <button onclick="window.location.href='Carrito/carrito.html'" class="btn2 Carrito">🛒<span class="Carrito-texto">Carrito</span></button>
+
+    <section class="recetas">
+      <div class="recetas-header">
+        <h2>Recetas saludables con nuestros productos 🥗</h2>
+        <p>Descubrí ideas fáciles y deliciosas para aprovechar al máximo nuestros productos naturales.</p>
+      </div>
+
+      <div class="recetas-grid">
+        <article class="receta-card">
+          <img src="https://mejorconsalud.as.com/wp-content/uploads/2021/03/batidos-tropicales.jpg" alt="Smoothie tropical saludable">
+          <div class="receta-body">
+            <h3>Smoothie tropical energético</h3>
+            <p>Mezclá banana, mango y nuestro batido proteico natural para un comienzo lleno de energía.</p>
+            <button class="receta-link" onclick="noDisponible()">Ver receta completa →</button>
+          </div>
+        </article>
+
+        <article class="receta-card">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" alt="Tostadas integrales">
+          <div class="receta-body">
+            <h3>Tostadas integrales con mermelada casera</h3>
+            <p>Una opción dulce y natural con nuestras mermeladas sin azúcar y pan integral artesanal.</p>
+            <button class="receta-link" onclick="noDisponible()">Ver receta completa →</button>
+          </div>
+        </article>
+
+        <article class="receta-card">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Granola artesanal con yogurt">
+          <div class="receta-body">
+            <h3>Granola artesanal con yogurt</h3>
+            <p>Combiná nuestra granola artesanal con yogurt natural y frutas frescas para un desayuno ideal.</p>
+            <button class="receta-link" onclick="noDisponible()">Ver receta completa →</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <section id="nosotros" class="nosotros">
+      <h2>Sobre Saludablemente</h2>
+      <p>Saludablemente nace de la convicción de que comer bien debe ser accesible y sabroso. Trabajamos con productores locales, priorizamos ingredientes de calidad y cuidamos los procesos para que cada producto sea una elección consciente. Nuestro enfoque es honesto: etiquetas claras, porciones reales y una filosofía basada en el equilibrio.</p>
+    </section>
+
+    <section id="contacto" class="contacto">
+      <div class="contact-wrapper">
+        <div class="contact-form">
+          <h2>Contacto</h2>
+          <p>¿Querés vender nuestros productos en tu tienda, tenés una consulta o querés comprar al por mayor? Escribinos.</p>
+          <form onsubmit="event.preventDefault(); sendMessage();">
+            <input id="nombre" placeholder="Nombre" required />
+            <input id="email" placeholder="Correo electrónico" required />
+            <textarea id="mensaje" placeholder="Tu mensaje" required></textarea>
+            <button class="btn" onclick="noDisponible()" type="submit">Enviar mensaje</button>
+          </form>
+        </div>
+        <aside class="contact-info">
+          <h3>Info rápida</h3>
+          <div class="info-line">Tel: +54 9 362-4992755</div>
+          <div class="info-line">Email: lucasignaciosantiagozalazar@gmail.com</div>
+          <div class="info-line">Horario: Lun a Vie 9:00–18:00</div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-brand">Saludablemente</div>
+        <p class="footer-slogan">💳 Pagos seguros | 📦 Comprá fácil y rápido</p>
+      </div>
+
+      <div class="footer-center">
+        <p class="footer-community">Seguinos para recibir tips saludables:</p>
+        <div class="footer-social">
+          <button class="redesButton" onclick="window.open('https://www.instagram.com/saludablementear?igsh=MXdidnF6Zm55aXZ4Yw==', '_blank')"  aria-label="Instagram">📸 Instagram</button>
+          <button class="redesButton" onclick="noDisponible()" aria-label="Facebook">📘 Facebook</button>
+          <button class="redesButton" onclick="noDisponible()" aria-label="TikTok">🎵 TikTok</button>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-copy">© Saludablemente - Todos los derechos reservados</div>
+        <div class="footer-links">
+          <button class="boton-texto" onclick="noDisponible()">Política de privacidad</button>
+          <a>|</a>
+          <button class="boton-texto" onclick="noDisponible()">Términos</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="Js/Carrito.js"></script>
+  <script>
+    console.log("Scripts cargados correctamente");
+    console.log("mostrarAlerta:", typeof mostrarAlerta);
+    console.log("agregarAlCarrito:", typeof agregarAlCarrito);
+  </script>
+
+  <div id="alerta" class="alerta"></div>
+
+</div>
+</body>
+</html>

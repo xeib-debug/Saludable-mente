@@ -58,13 +58,20 @@ header {
   background: var(--accent);
   color: white;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 15px;
   text-decoration: none;
   font-weight: 600;
 }
 
-.btn-volver:hover {
-  background: #256d45;
+.btn-volver:hover{
+  transform: scale(1.05) translateZ(0);
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn-volver:active{
+  transform: scale(0.95) translateZ(0);
+  background-color: rgb(30, 90, 56);
 }
 
 /* Main */
@@ -149,10 +156,18 @@ main {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+  transition: 0.3s;
 }
 
 .btn:hover {
-  background: #256d45;
+  transform: scale(1.05) translateZ(0);
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn:active{
+  transform: scale(0.95) translateZ(0);
+  background-color: rgb(30, 90, 56);
 }
 
 /* ===== FOOTER ===== */

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Usuarios - Admin</title>
   <link rel="stylesheet" href="../style.css">
+  <link rel="icon" type="image/png" href="../file_00000000aef871f5afb30c26ea51f4b5.png">
   <style>
     head{
         cursor: default;
@@ -183,7 +184,7 @@
         localStorage.removeItem("adminLoginTime");
         mostrarAlerta("Sesión cerrada", "info");
         setTimeout(() => {
-          window.location.href = "../index.html";
+          window.location.href = "../home.html";
         }, 1000);
       }
     }
