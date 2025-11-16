@@ -1,34 +1,49 @@
 :root{
-  --bg:#FBFBFB; --card:#FFFFFF; --accent:#2E8B57; --muted:#61707a; --glass:rgba(255,255,255,0.6);
+  --bg:#FBFBFB; --card:#FFFFFF; --accent:rgba(46, 139, 87, 1); --accent-hover:rgb(30, 90, 56); --muted:#61707a; --glass:rgba(255,255,255,0.6);
   --radius:14px; --shadow:0 6px 18px rgba(17,24,39,0.08);
 }
 *{box-sizing:border-box}
 body{
   font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   margin:0;
-  background:linear-gradient(180deg,#cdfccd 0%,var(--bg) 40%);
+  background:linear-gradient(180deg,rgba(170, 240, 205, 1) 0%,var(--bg) 50%);
   color:#0f172a;
   cursor: default;
 }
 
 /* Header */
 header{
+  background: rgb(118, 243, 172);
+  min-width: 100%;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:22px 28px;
+  padding:18px 28px;
   max-width:1200px;
-  margin:20px auto;
+  margin: 0 auto 20px auto;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 0px 15px rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+}
+
+header a{
+  padding: 1px 5px 1px 5px;
+  border-radius: 15px;
+  background: transparent;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 a:hover{
-    color: black;
+  background:#2e8b5650;
+  color: black;
+  border-style: solid 0px;
 }
 
 .brand{
-    display:flex;
-    gap:14px;
-    align-items:center
+  display:flex;
+  gap:14px;
+  align-items:center
 }
 
 .logo{
@@ -103,36 +118,54 @@ nav a{
 .btn{
   background:var(--accent);
   color:white;
-  padding:12px 18px;
-  border-radius:10px;
+  padding:10px 18px;
+  border-radius:15px;
   border:none;
   font-weight:700;
-  cursor:pointer
+  cursor:pointer;
+  transition: transform 0.3s ease;
+}
+
+.btn:hover{
+  transform: scale(1.05) translateZ(0);
+  background-color: rgb(30, 90, 56);
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn:active{
+  transform: scale(0.95) translateZ(0)
 }
 
 .productosDes {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* separa el título y el botón */
+  justify-content: space-between;
   margin-bottom: 15px;
 }
 
 .btn2{
   background:var(--accent);
   color:rgb(255, 255, 255);
-  padding:12px 18px;
-  border-radius:10px;
+  padding:10px 18px;
+  border-radius:15px;
   border:none;
   font-weight:700;
   font-size: 15px;
   cursor:pointer;
   text-decoration: none;
+  transition: 0.3s;
 }
 
 .btn2:hover{
   background-color: rgb(30, 90, 56);
   color: rgb(255, 255, 255);
   text-decoration: none;
+  transform: scale(1.05) translateZ(0);
+}
+
+.btn2:active{
+  transform: scale(0.95) translateZ(0)
 }
 
 .btn.ghost2{
@@ -142,8 +175,14 @@ nav a{
 }
 
 .btn.ghost2:hover{
+  transform: scale(1.05) translateZ(0);
   background-color: rgba(27, 82, 51, 0.14)
 }
+
+.btn.ghost2:active{
+  transform: scale(0.95) translateZ(0)
+}
+
 
 .btn.ghost{
   background:transparent;
@@ -151,14 +190,10 @@ nav a{
   border:2px solid rgba(46,139,87,0.14)
 }
 
-.btn:hover{
-  background-color: rgb(30, 90, 56);
-}
-
 .hero-aside{
-  background:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=60') center/cover;
+  background:url('file_00000000aef871f5afb30c26ea51f4b5.png') center/cover;
   border-radius:12px;
-  min-height:260px;
+  min-height:350px;
   box-shadow:0 8px 28px rgba(14,30,21,0.06)
 }
 
@@ -189,7 +224,7 @@ main{
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px
+  gap:18px;
 }
 
 .card{
@@ -208,7 +243,6 @@ main{
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 1px 5px 10px;
-  font-size: 18px;
 }
 
 .cardinfo{
@@ -249,7 +283,14 @@ main{
 .price{
   margin-left:auto;
   font-weight:800;
-  color:#0f5132
+  color:#0f5132;
+  transition: 0.3s;
+}
+
+.card:hover .price {
+  transform: scale(1.4);
+  display: inline-block;
+  transition: transform 0.3s ease;
 }
 
 .card-actions{
@@ -267,6 +308,19 @@ main{
   color:var(--accent);
   display:inline-block;
   font-weight:700
+}
+
+/* Carrito */
+
+.Carrito{
+  font-size: 3vh;
+  min-width: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Nosotros / Contacto */
@@ -485,6 +539,7 @@ footer {
   font-size: 15px;
   font-weight: 700;
   text-decoration: none;
+  transition: 0.3s;
 }
 
 .redesButton:hover {
@@ -523,7 +578,7 @@ footer {
   visibility: hidden;
   pointer-events: none;
   transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  transition: 0.4s;
   z-index: 99999; /* Aumentado para asegurar que esté encima de todo */
   cursor: default;
   min-width: 250px;
@@ -534,7 +589,7 @@ footer {
 .alerta.mostrar {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(-10px);
   pointer-events: all;
 }
 
@@ -575,10 +630,10 @@ footer {
 /* ============================= */
 /*        MODO RESPONSIVE        */
 /* ============================= */
-@media (max-width: 900px) {
+@media (max-width: 650px) {
 
   body {
-    padding: 0 10px;
+    padding: 0;
   }
 
   header {
@@ -586,6 +641,13 @@ footer {
     align-items: center;
     text-align: center;
     gap: 10px;
+    min-width: 100%;
+    margin: 0 auto 0 auto;
+    position: relative;
+  }
+  
+  .body2 {
+    padding: 0 10px;
   }
 
   nav {
@@ -609,6 +671,9 @@ footer {
     height: 200px;
     min-height: 200px;
     width: 100%;
+    min-width: 200px;
+    background-size: 50% auto;
+    background-repeat: no-repeat;
   }
 
   .cta {
@@ -626,6 +691,14 @@ footer {
     align-items: center;
     text-align: center;
     gap: 10px;
+  }
+
+  .Carrito {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    min-width: 100%;
   }
 
   .grid {

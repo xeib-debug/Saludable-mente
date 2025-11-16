@@ -127,19 +127,19 @@ main {
   color: var(--muted);
 }
 
-.price {
-  font-weight: 700;
-  color: var(--accent);
-  margin-top: 4px;
+.price{
+  margin-left:auto;
+  font-weight:800;
+  color:#0f5132;
   transition: 0.3s;
-  transform-origin: left; 
 }
 
 .card:hover .price {
-  transform: scale(1.3);
+  transform: scale(1.2);
   display: inline-block;
   transition: transform 0.3s ease;
 }
+
 .btn {
   margin-top: 10px;
   padding: 10px 14px;
@@ -288,7 +288,6 @@ footer {
   }
 }
 
-/*ALERTA PERSONALIZADA*/
 .alerta {
   position: fixed;
   bottom: 30px;
@@ -297,19 +296,24 @@ footer {
   color: white;
   padding: 14px 22px;
   border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
   font-weight: 600;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  z-index: 9999;
+  transition: 0.4s;
+  z-index: 99999; /* Aumentado para asegurar que esté encima de todo */
+  cursor: default;
+  min-width: 250px;
+  text-align: center;
 }
 
-/*activa */
+/* Activa */
 .alerta.mostrar {
   opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
+  transform: translateY(-10px);
   pointer-events: all;
 }
 

@@ -112,7 +112,13 @@
     }
     
     .submit-btn:hover {
+      transition: 0.3s;
       background: #256d45;
+    }
+
+    .submit-btn:active {
+      transition: 0.5;
+      transform: scale(0.95) translateY(0);
     }
     
     .volver {
@@ -121,13 +127,17 @@
     }
     
     .volver a {
+      padding: 1px 5px 1px 5px;
       color: #2E8B57;
       text-decoration: none;
       font-weight: 600;
+      border-style: solid 0px;
+      border-radius: 15px;
+      transition: 0.3s;
     }
-    
+
     .volver a:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
   </style>
 </head>
