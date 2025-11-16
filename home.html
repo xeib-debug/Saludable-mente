@@ -234,6 +234,25 @@
     console.log("mostrarAlerta:", typeof mostrarAlerta);
     console.log("agregarAlCarrito:", typeof agregarAlCarrito);
   </script>
+  
+  <script>
+    const header = document.querySelector('header');
+    const scrollThreshold = 50; // Cambiado a 50px para mejor efecto
+
+    function handleScroll() {
+      if (window.scrollY > scrollThreshold) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    }
+
+    // Escuchar el scroll
+    window.addEventListener('scroll', handleScroll);
+  
+    // Ejecutar inmediatamente por si ya hay scroll
+    handleScroll();
+  </script>
 
   <div id="alerta" class="alerta"></div>
 
