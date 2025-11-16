@@ -13,7 +13,6 @@ body{
 
 /* Header con efecto transparente al hacer scroll */
 header{
-  transform: translateY(-5px);
   background: rgba(118, 243, 172, 1);
   min-width: 100%;
   display:flex;
@@ -31,6 +30,7 @@ header{
 
 /* Header transparente cuando haces scroll */
 header.scrolled {
+  transform: translateY(-5px);
   background: rgba(118, 243, 172, 0.3); /* Más transparente */
   backdrop-filter: blur(10px); /* Efecto glassmorphism */
   -webkit-backdrop-filter: blur(10px); /* Para Safari */
@@ -39,6 +39,7 @@ header.scrolled {
 
 /* Header sólido al pasar el mouse */
 header.scrolled:hover {
+    transform: translateY(0);
   background: rgba(118, 243, 172, 1);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -663,6 +664,16 @@ footer {
     min-width: 100%;
     margin: 0 auto 0 auto;
     position: relative;
+    transform: translateY(0) !important;
+    transition: none !important;
+    background: rgb(118, 243, 172) !important;
+    box-shadow: 0 0 0 rgb(1,1,1);
+  }
+
+  header.scrolled {
+    background: rgb(118, 243, 172) !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 0 0 rgb(1,1,1);
   }
   
   .body2 {
