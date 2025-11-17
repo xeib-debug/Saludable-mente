@@ -26,6 +26,10 @@
     .admin-header h1 {
       color: #2E8B57;
     }
+
+    .admin-header-button{
+      margin-left: 10px;
+    }
     
     .stats-grid {
       display: grid;
@@ -210,7 +214,10 @@
   <div class="admin-container">
     <div class="admin-header">
       <h1>📊 Panel de Administración</h1>
-      <button class="btn" onclick="window.location.href='../home.html'">Volver al Sitio</button>
+      <div class="admin-header-button">
+      <button class="btn" onclick="window.location.href='../home.html'">Home</button>
+      <button class="btn" onclick="window.location.href='usuarios.html'">Usuarios</button>
+      </div> 
     </div>
     
     <!-- Estadísticas -->
